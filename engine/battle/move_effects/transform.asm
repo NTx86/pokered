@@ -98,20 +98,12 @@ TransformEffect_:
 ; 5 PP for all moves
 	ld a, [hli]
 	and a
-	jr z, .lessThanFourMoves
+	jr z, .copyStats
 	ld a, $5
 	ld [de], a
 	inc de
 	dec b
 	jr nz, .copyPPLoop
-	jr .copyStats
-.lessThanFourMoves
-; 0 PP for blank moves
-	xor a
-	ld [de], a
-	inc de
-	dec b
-	jr nz, .lessThanFourMoves
 .copyStats
 ; original (unmodified) stats and stat mods
 	pop hl

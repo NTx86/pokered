@@ -1,6 +1,6 @@
 DisplayPokemartDialogue_::
 	ld a, [wListScrollOffset]
-	ld [wSavedListScrollOffset], a
+	push af
 	call UpdateSprites
 	xor a
 	ld [wBoughtOrSoldItemInMart], a
@@ -223,7 +223,7 @@ DisplayPokemartDialogue_::
 	ld a, 1
 	ld [wUpdateSpritesEnabled], a
 	call UpdateSprites
-	ld a, [wSavedListScrollOffset]
+	pop af
 	ld [wListScrollOffset], a
 	ret
 

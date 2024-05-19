@@ -366,6 +366,7 @@ MainInBattleLoop:
 	ld [wPlayerSelectedMove], a
 .specialMoveNotUsed
 	callfar SwitchEnemyMon
+	jp .enemyMovesFirst
 .noLinkBattle
 	ld a, [wPlayerSelectedMove]
 	cp QUICK_ATTACK
@@ -1157,9 +1158,6 @@ HandlePlayerBlackOut:
 	ld hl, LinkBattleLostText
 .noLinkBattle
 	call PrintText
-	ld a, [wd732]
-	res 5, a
-	ld [wd732], a
 	call ClearScreen
 	scf
 	ret
@@ -3005,9 +3003,6 @@ SelectEnemyMove:
 LinkBattleExchangeData:
 	ld a, $ff
 	ld [wSerialExchangeNybbleReceiveData], a
-	ld a, [wPlayerMoveListIndex]
-	cp LINKBATTLE_RUN ; is the player running from battle?
-	jr z, .doExchange
 	ld a, [wActionResultOrTookBattleTurn]
 	and a ; is the player switching in another mon?
 	jr nz, .switching
@@ -3421,7 +3416,7 @@ CheckPlayerStatusConditions:
 	call PlayMoveAnimation
 	call BattleRandom
 	cp 50 percent + 1 ; chance to hurt itself
-	jr c, .TriedToUseDisabledMoveCheck
+	jp c, .ParalysisCheck
 	ld hl, wPlayerBattleStatus1
 	ld a, [hl]
 	and 1 << CONFUSED ; if mon hurts itself, clear every other status from wPlayerBattleStatus1
@@ -4060,28 +4055,17 @@ CheckForDisobedience:
 	ld a, [wBattleMonMoves + 1]
 	and a ; is the second move slot empty?
 	jr z, .monDoesNothing ; mon will not use move if it only knows one move
-	ld a, [wPlayerDisabledMoveNumber]
-	and a
-	jr nz, .monDoesNothing
-	ld a, [wPlayerSelectedMove]
-	cp STRUGGLE
-	jr z, .monDoesNothing ; mon will not use move if struggling
 ; check if only one move has remaining PP
 	ld hl, wBattleMonPP
 	push hl
 	ld a, [hli]
-	and $3f
-	ld b, a
-	ld a, [hli]
-	and $3f
+	ld b, [hl]
+	inc hl
 	add b
-	ld b, a
-	ld a, [hli]
-	and $3f
+	ld b, [hl]
+	inc hl
 	add b
-	ld b, a
-	ld a, [hl]
-	and $3f
+	ld b, [hl]
 	add b
 	pop hl
 	push af
@@ -4089,9 +4073,7 @@ CheckForDisobedience:
 	ld c, a
 	ld b, $0
 	add hl, bc
-	ld a, [hl]
-	and $3f
-	ld b, a
+	ld b, [hl]
 	pop af
 	cp b
 	jr z, .monDoesNothing ; mon will not use move if only one move has remaining PP
@@ -5372,11 +5354,11 @@ MoveHitTest:
 	and SLP_MASK
 	jp z, .moveMissed
 .swiftCheck
+	call CheckTargetSubstitute ; substitute check (note that this overwrites a)
+	jr z, .checkForDigOrFlyStatus
 	ld a, [de]
 	cp SWIFT_EFFECT
 	ret z ; Swift never misses (this was fixed from the Japanese versions)
-	call CheckTargetSubstitute ; substitute check (note that this overwrites a)
-	jr z, .checkForDigOrFlyStatus
 ; The fix for Swift broke this code. It's supposed to prevent HP draining moves from working on Substitutes.
 ; Since CheckTargetSubstitute overwrites a with either $00 or $01, it never works.
 	cp DRAIN_HP_EFFECT

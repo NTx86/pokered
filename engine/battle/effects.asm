@@ -977,6 +977,7 @@ FlinchSideEffect:
 	ld hl, wPlayerBattleStatus1
 	ld de, wEnemyMoveEffect
 .flinchSideEffect
+	call ClearHyperBeam
 	ld a, [de]
 	cp FLINCH_SIDE_EFFECT1
 	ld b, 10 percent + 1 ; chance of flinch (FLINCH_SIDE_EFFECT1)
@@ -987,7 +988,6 @@ FlinchSideEffect:
 	cp b
 	ret nc
 	set FLINCHED, [hl] ; set mon's status to flinching
-	call ClearHyperBeam
 	ret
 
 OneHitKOEffect:

@@ -1977,11 +1977,7 @@ ItemUsePPRestore:
 	ld hl, RestorePPWhichTechniqueText ; otherwise, print the restore PP message
 .printWhichTechniqueMessage
 	call PrintText
-	xor a
-	ld [wPlayerMoveListIndex], a
 	callfar MoveSelectionMenu ; move selection menu
-	ld a, 0
-	ld [wPlayerMoveListIndex], a
 	jr nz, .chooseMon
 	ld hl, wPartyMon1Moves
 	ld bc, wPartyMon2 - wPartyMon1

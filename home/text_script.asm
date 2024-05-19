@@ -196,9 +196,6 @@ PokemonFaintedText::
 DisplayPlayerBlackedOutText::
 	ld hl, PlayerBlackedOutText
 	call PrintText
-	ld a, [wd732]
-	res 5, a ; reset forced to use bike bit
-	ld [wd732], a
 	jp HoldTextDisplayOpen
 
 PlayerBlackedOutText::

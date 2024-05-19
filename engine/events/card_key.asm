@@ -8,7 +8,6 @@ PrintCardKeyText:
 	ret z
 	cp b
 	jr nz, .silphCoMapListLoop
-	predef GetTileAndCoordsInFrontOfPlayer
 	ld a, [wTileInFrontOfPlayer]
 	cp $18
 	jr z, .cardKeyDoorInFrontOfPlayer

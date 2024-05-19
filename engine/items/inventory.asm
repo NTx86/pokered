@@ -134,7 +134,6 @@ RemoveItemFromInventory_::
 	ld [wListScrollOffset], a
 	ld [wCurrentMenuItem], a
 	ld [wBagSavedMenuItem], a
-	ld [wSavedListScrollOffset], a
 	pop hl
 	ld a, [hl] ; a = number of items in inventory
 	dec a ; decrement the number of items

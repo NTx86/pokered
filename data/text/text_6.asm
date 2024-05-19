@@ -175,9 +175,9 @@ _TeachMachineMoveText::
 
 _MonCannotLearnMachineMoveText::
 	text_ram wcd6d
-	text " is not"
-	line "compatible with"
-	cont "@"
+	text " is"
+	line "not compatible"
+	cont "with @"
 	text_ram wStringBuffer
 	text "."
 

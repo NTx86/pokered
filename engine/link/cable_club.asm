@@ -350,16 +350,6 @@ TradeCenter_SelectMon:
 	jp z, .getNewInput
 	bit BIT_A_BUTTON, a
 	jr z, .enemyMonMenu_ANotPressed
-; if A button pressed
-	ld a, [wMaxMenuItem]
-	ld c, a
-	ld a, [wCurrentMenuItem]
-	cp c
-	jr c, .displayEnemyMonStats
-	ld a, [wMaxMenuItem]
-	dec a
-	ld [wCurrentMenuItem], a
-.displayEnemyMonStats
 	ld a, INIT_ENEMYOT_LIST
 	ld [wInitListType], a
 	callfar InitList ; the list isn't used
@@ -402,9 +392,6 @@ TradeCenter_SelectMon:
 	ld [wTopMenuItemY], a
 	ld a, 1
 	ld [wTopMenuItemX], a
-	hlcoord 1, 1
-	lb bc, 6, 1
-	call ClearScreenArea
 .playerMonMenu_HandleInput
 	ld hl, hUILayoutFlags
 	set 1, [hl]
@@ -458,14 +445,7 @@ TradeCenter_SelectMon:
 .chosePlayerMon
 	call SaveScreenTilesToBuffer1
 	call PlaceUnfilledArrowMenuCursor
-	ld a, [wMaxMenuItem]
-	ld c, a
 	ld a, [wCurrentMenuItem]
-	cp c
-	jr c, .displayStatsTradeMenu
-	ld a, [wMaxMenuItem]
-	dec a
-.displayStatsTradeMenu
 	push af
 	hlcoord 0, 14
 	ld b, 2
