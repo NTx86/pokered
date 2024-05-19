@@ -1,6 +1,9 @@
 # Pokémon Red and Blue [![Build Status][ci-badge]][ci]
 
-This is a disassembly of Pokémon Red and Blue.
+This is a disassembly of December 6th localization prototype of Pokémon Red and Blue.
+It should build identical version of December 6th prototype except the checksum
+
+To fix this change four bytes at offset 0x14C to 0x0E 0xC5 0x00 0x00
 
 It builds the following ROMs:
 
